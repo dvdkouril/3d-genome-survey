@@ -1,0 +1,251 @@
+#+title: Genomes in 3D: An overview for data visualization researchers
+#+author: David Kouril
+#+bibliography: star3dgenome.bib
+#+cite_export: csl
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="styles.css"/>
+
+#+BEGIN_CENTER
+/DISCLAIMER/: *This is a heavily work-in-progress document.*\\
+I do not guarantee that all parts are readable or perfectly correct at this stage.
+#+END_CENTER
+
+# previous titles: Visualizing 3D genomic data
+
+* Introduction
+Almost everybody is familiar with DNA as the basic building block of life. Less
+known is the fact that DNA's folding in the cell nucleus plays a crucial role
+in its function. Indeed, it is difficult to imagine the packing of approx. 2 m
+long DNA fiber into a micron-sized nucleus. It is also difficult to get a
+detailed image of the folded structure---also called chromatin---through
+microscopy, due to chromatin's occupancy across several magnitudes of scale.
+Nevertheless, the significance of the genome's spatial organization led to
+attempts at unlocking the principles behind the multilevel and dynamic folding
+mechanisms. Besides investigations at the individual research group level,
+several consortia have been established behind the goal of elucidating the
+organization of genomic material in cells both in space and in time, e.g.,
+4DNucleome [cite:@dekker_4d_2017].
+
+Genomes have historically been examined through 1D data, so-called /genomic
+signals/. A special branch of visualization tools called /genome browsers/,
+aligns genomic signals from various experiments along genomic coordinates for
+effective comparison. There have been efforts to capture the spatial
+conformation of genomes, through the so-called Chromosome Conformation Capture
+methodologies. We will explain the principles and caveats of their results in
+later sections. The use of 3D models and visualization is not a novel concept
+for the field, but this data modality is to this day largely underutilized in
+existing genome browsers. The DNA's folding however remains a strictly spatial
+phenomenon, which might make sense to examine in its natural 3D representation.
+We have seen, for example, in
+medicine[cite:@preim_visualization_2007],[cite:@preim_visual_2013] and
+proteomics [cite:@kozlikova_visualization_2017], that data visualization, and
+especially 3D visualization, can be a powerful tool in life science
+disciplines.
+
+We therefore dedicate this State of The Art Report to the investigation of the
+role of 3D data and visualization in genomics. Over the years we have seen 3D
+proven useful for the presentation of results. Branching into sci-art, 3D
+visualization is utilized for explaining biological structures and processes.
+The question remains, in which other use cases provides 3D visualization
+utility beyond that of presentations, at the end of an analytical pipeline.
+While we will focus our attention on 3D genomic data specifically, we also wish
+to generalize and look at the role of 3D in general. When is it useful to
+interact with and analyze directly the spatial three-dimensional
+representation, as opposed to a more abstract one?
+
+To summarize these ideas, we set out to write this survey with the following
+goals in mind:
+- *Provide a visualization researcher with a comprehensive introduction to the
+  investigation of spatial chromatin structure*: We will consolidate available
+  knowledge and existing approaches to modeling and visualizing genomes in 3D.
+  It is especially important to present this information in a form digestable
+  by data visualization researchers, who despite having previous biological
+  knowledge might still not be oriented specifically in 3D genome modeling.
+- *Survey sources of 3D genome data*: Without data in hand, visualization
+  researchers can hardly do their work. We therefore aim to gather existing
+  published datasets and data repositories that visualization experts can use
+  as a starting point in developing novel visualization methods.
+- *Compile previously proposed visual representations and visualization tools
+  for displaying 3D genomic data*: Over the past decades, several visualization
+  tools claiming to visualize 3D genomes have emerged. There is a wide
+  diversity of used representations, technologies, and even sources of 3D data,
+  with varying degrees of utility in actual biological research. We will
+  specifically identify known visualization techniques and principles, along
+  with potential issues.
+- *Describe tasks typically associated with 3D genomic data.* It is difficult
+  to describe what biologists use the data for visualization researchers, as
+  there are many concepts that biology students learn.
+- *Identify opportunities for data visualization's impact in 3D genome
+  research:*
+
+We will outline opportunities for improvement in terms of leveraging data
+characteristics for data storage, integration, proper visual representations,
+and interactions with the 3D data.
+
+* Biological background
+In this section, we will provide a brief primer on biological concepts and
+terms, to provide context for 3D genomic data to visualization researchers with
+limited biological expertise. We will give definitions to concepts of a /gene/,
+/genome/, /bin/, etc.
+
+* Previous Surveys
+The examination of spatial aspects of genomes through visualization has been
+going on since the 2000s.  Several surveys examine 3D genomic data and its
+visualization from the biological perspective, focusing on the experiments and
+means of attaining a three-dimensional prediction of the chromatin structure.
+Data visualization is often included as an important part of the methodology,
+either implicitly or explicitly.
+
+Marti-Renom and Mirny [cite:@marti-renom_bridging_2011] give a general
+introduction into---at that time novel---computational methods for
+investigating the three-dimensional organization of genomes.  They highlight
+the need for computational models as a complement to microscopy imaging in
+efforts to gain insight into the genome's organization in space and time.
+Imakaev et al. [cite:@imakaev_modeling_2015] further give a great overview of
+methods for generating 3D models of chromatin conformation. Notable here is the
+grouping into two distinct groups: first, the 3D models are created from
+experimental data, while second, the models are created from basic physical
+properties known, or hypothesized, about the fiber.
+
+Several works examine the role of visualization in the effort to create a
+picture of chromatin folding. Most, again, approach the topic from the
+computational biology direction.  First of all, Goodstadt and Marti-Renom
+[cite:@goodstadt_n_challenges_2017] provide an excellent overview of 3D genomic
+data and challenges with its visualization. They pinpoint general
+characteristics of the data, such as being multiscale, multistate,
+time-dependent, and uncertain.  What this survey lacks is a visualization
+perspective and an actionable set of opportunities for data visualization
+impact.
+
+The same two authors give a more detailed examination of depicting the
+architecture of genome folding [cite:@goodstadt_communicating_2019]. While an
+excellent resource---almost diminishing the need for our original survey---we
+find two issues with it. First of all, it groups all modalities for
+investigating chromatin conformation: both 2D matrices and 3D models are
+included. This makes the role of 3D visualization still uncertain and
+ambiguous. Second, they do not look at the topic through the data visualization
+lens. The survey nicely overviews existing approaches but does not contemplate
+used visual representations and their effectiveness. We wish to provide more
+actionable steps where leveraging existing data visualization principles can
+lead to insight in this branch of biology.
+
+
+Not many works have been published in data visualization or related venues. The
+most relevant is Nusrat et al.'s paper [cite:@nusrat_tasks_2019] containing a
+taxonomy for genomic data visualization. The authors give a comprehensive and
+general overview of data visualizations in genomics. Notably, the 3D data
+section---in their definition the /spatial layout/---is mentioned only briefly,
+hinting at additional complexities both in acquiring the 3D data, and
+visualizing them along the conventional genomic visualizations.
+
+* Chromatin Conformation Capture
+The pivotal methodology that allowed biologists to study the genome's spatial
+attributes is commonly grouped under the Chromatin Conformation Capture suite
+of experiments. Lajoie et al. [cite:@lajoie_hitchhikers_2015] provide a
+detailed description of the technique. Chromatin conformation capture
+experiments typically result in 2D matrices containing contact frequencies of
+same-sized genomic regions. In this section, we will explain on a high level
+methods such as 3C and Hi-C. We will also discuss the significant differences
+between bulk and single-cell versions of these experiments.
+
+* 3D Genome Data
+There are several distinct ways of acquiring spatial 3D models of genomic
+structures. Imakaev et al. [cite:@imakaev_modeling_2015] give a good overview
+and categorize the models into 2 categories, both including two groups.
+
+** Data Formats
+No standard format emerged yet. Many tools repurpose the Protein Data Bank
+(PDB) file format. At least two file formats have been developed alongside
+specific tools: the nucle3D format (used by Nucleome Browser) and g3d (used by
+WashU Epigenome Browser).
+
+What we have seen in the wild:
+
+tsv:
+#+BEGIN_SRC
+chr22
+5000
+16050000
+0	0.29883785749865993	0.5455806883664623	0.6850458187524432
+1	0.2857703764191426	0.5700623158391935	0.6742272833615329
+2	0.28884753760940096	0.555006785455926	0.6865537935240877
+#+END_SRC
+
+xyz:
+#+BEGIN_SRC
+97
+sample = 0
+CA	1.101124	0.547027	-2.299305
+CA	-0.919687	1.275041	-3.201912
+CA	-0.974526	1.144577	-4.491504
+#+END_SRC
+
+cif:
+#+BEGIN_SRC
+data_cell
+# Created with OpenMM 8.1, 2024-03-20
+#
+loop_
+_atom_site.group_PDB
+_atom_site.id
+_atom_site.type_symbol
+_atom_site.label_atom_id
+_atom_site.label_alt_id
+_atom_site.label_comp_id
+_atom_site.label_asym_id
+_atom_site.label_entity_id
+_atom_site.label_seq_id
+_atom_site.pdbx_PDB_ins_code
+_atom_site.Cartn_x
+_atom_site.Cartn_y
+_atom_site.Cartn_z
+_atom_site.occupancy
+_atom_site.B_iso_or_equiv
+_atom_site.Cartn_x_esd
+_atom_site.Cartn_y_esd
+_atom_site.Cartn_z_esd
+_atom_site.occupancy_esd
+_atom_site.B_iso_or_equiv_esd
+_atom_site.pdbx_formal_charge
+_atom_site.auth_seq_id
+_atom_site.auth_comp_id
+_atom_site.auth_asym_id
+_atom_site.auth_atom_id
+_atom_site.pdbx_PDB_model_num
+ATOM      1 D   CA   . ALA  A ?     1 .   -37.6722    -1.1783    -5.1408  0.0  0.0  ?  ?  ?  ?  ?  .      1  ALA A   CA     1
+ATOM      2 D   CA   . ALA  A ?     2 .   -37.5695    -2.0178    -5.8702  0.0  0.0  ?  ?  ?  ?  ?  .      2  ALA A   CA     1
+ATOM      3 D   CA   . ALA  A ?     3 .   -38.5706    -1.5254    -6.5343  0.0  0.0  ?  ?  ?  ?  ?  .      3  ALA A   CA     1
+ATOM      4 D   CA   . ALA  A ?     4 .   -39.4098    -1.2396    -7.3907  0.0  0.0  ?  ?  ?  ?  ?  .      4  ALA A   CA     1
+#+END_SRC
+
+3dg:
+#+BEGIN_SRC
+15(pat)	20000000	14.6680061242	-15.8063764737	2.78330030144
+15(pat)	20100000	13.6859245238	-16.3328318034	2.66650514513
+15(pat)	20200000	13.34613308	-16.6077299794	1.53705368588
+#+END_SRC
+
+** Data Repositories
+Despite there being data portals dedicated to genomic data, and specifically 3D organization of genomes (e.g., 4DN), only one repository dedicated to actual spatial 3D models of chromatin exists: 3GDB.
+
+* Tools for Visualizing 3D Genome
+Here, we overview previously proposed 3D genome visualization tools. For example:
+Genome3D [cite:@asbury_genome3d_2010],
+GMOL [cite:@nowotny_gmol_2016], 3Disease Browser [cite:@li_3disease_2016],
+HiC-3DViewer [cite:@djekidel_hic-3dviewer_2017], Delta [cite:@tang_delta_2017],
+GenomeFlow [cite:@trieu_genomeflow_2019],
+CSynth [cite:@todd_csynth_2020].
+3DBG/3DGB [cite:@butyaev_low-latency_2015], TADbit/TADkit [cite:@serra_automatic_2017][cite:@goodstadt_tadkit_2015].
+We see a trend where the development of most of these tools has been abandoned.
+We identified two established tools that implement 3D visualization functionality and are currently maintained:
+Nucleome Browser [cite:@zhu_nucleome_2022] and WashU Epigenome Browser [cite:@li_washu_2019].
+
+Some categories by which we can sort these tools: a) web/desktop, b) AR and VR, c) server required or not.
+
+* Challenges
+Missing a unified file format.
+Non-standardized visual representations.
+Large data exploration, nested structures.
+Interoprable tools instead of separate visual analytics systems.
+
+* References
+#+print_bibliography:
